@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  docker-mysql:
+    restart: always
+    container_name: docker-mysql
+    image: mysql
+    environment:
+      MYSQL_DATABASE: share_everything_01
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+
+    ports:
+      - "6033:3306"
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=root--execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
+
+  share-everything:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: share-everything-backend
+    container_name: share-everything
+    tty: true
+    environment:
+      - "DB_HOST=docker-mysql"                                     #Database Server Ip
+      - "DB_PORT=3306"                                              #Database Server Port
+      - "DB_NAME=share_everything_01"                                         #Database Name
+      - "DB_USER=root"                                              #Database User Name
+      - "DB_PASSWORD=root"                                    #Database Server Password
+      - "SPRING_CONFIG_LOCATION=/home/config/"
+      - "DEBUG_ENABLED=true"
+      - "DEFAULT_LOG_LEVEL=trace"
+    volumes:
+      - ./src/main/resources:/home/config
+      - type: bind
+        source: ./logs
+        target: /home/logs
+    ports:
+      - "8093:8093"
+    depends_on:
+      - docker-mysql
+
+
+
+
+
