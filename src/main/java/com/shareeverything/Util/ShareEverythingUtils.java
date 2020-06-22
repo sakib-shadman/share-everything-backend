@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -106,5 +107,11 @@ public class ShareEverythingUtils {
             log.error("date parse failed.", e);
         }
         return new Date();
+    }
+
+    public static String readStringFromFile(String resourceRelativePath) throws Exception {
+        InputStream stream = new ClassPathResource(resourceRelativePath).getInputStream();
+        byte[] encoded = IOUtils.toByteArray(stream);
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 }

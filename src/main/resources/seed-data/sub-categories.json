@@ -1,0 +1,32 @@
+[
+  {
+    "category" : {
+
+      "id" : "99597246-7dec-4db1-96ed-aeb42c4af485"
+    },
+    "name": "Parking"
+  },
+  {
+    "category" : {
+
+      "id" : "99597246-7dec-4db1-96ed-aeb42c4af485"
+    },
+    "name": "Godown"
+  },
+  {
+    "category" : {
+
+      "id" : "99597246-7dec-4db1-96ed-aeb42c4af485"
+    },
+    "name": "Garage"
+  },
+  {
+    "category" : {
+
+      "id" : "77739fa9-0129-4b63-8c6a-8ba08ea71add"
+    },
+    "name": "Books"
+  }
+
+]
+

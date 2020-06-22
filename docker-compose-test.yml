@@ -33,11 +33,11 @@ services:
       - "DB_NAME=share_everything_01"                                         #Database Name
       - "DB_USER=root"                                              #Database User Name
       - "DB_PASSWORD=root"                                    #Database Server Password
-      - "SPRING_CONFIG_LOCATION=/home/config/"
+      - "SPRING_CONFIG_LOCATION=/home/seed-data/"
       - "DEBUG_ENABLED=true"
       - "DEFAULT_LOG_LEVEL=trace"
     volumes:
-      - ./src/main/resources:/home/config
+      - ./src/main/resources:/home/seed-data
       - type: bind
         source: ./logs
         target: /home/logs
