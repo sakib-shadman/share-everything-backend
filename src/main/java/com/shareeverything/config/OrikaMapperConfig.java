@@ -2,6 +2,8 @@ package com.shareeverything.config;
 
 import com.shareeverything.Util.ShareEverythingUtils;
 import com.shareeverything.dto.UserDto;
+import com.shareeverything.dto.request.PostRequestDto;
+import com.shareeverything.entity.Post;
 import com.shareeverything.entity.User;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MappingContext;
@@ -23,6 +25,14 @@ public class OrikaMapperConfig {
 
         mapperFactory.getConverterFactory().registerConverter("uuid-string", new StringUUID());
         mapperFactory.getConverterFactory().registerConverter("date-string",new DateString());
+
+
+
+        mapperFactory.classMap(PostRequestDto.class, Post.class)
+                .fieldMap("startDate","startDate").converter("date-string").add()
+                .fieldMap("expireDate","expireDate").converter("date-string").add()
+                .byDefault().register();
+
 
         return mapperFactory;
     }
