@@ -19,7 +19,7 @@ public class PostRequestDto {
 
     String startDate;
 
-    String expiredDate;
+    String expireDate;
 
     String contactNo;
 

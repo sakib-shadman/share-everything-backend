@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostResponseDto {
 
+    String id;
+
     String title;
 
     String description;
@@ -20,7 +22,7 @@ public class PostResponseDto {
 
     String startDate;
 
-    String expiredDate;
+    String expireDate;
 
     String contactNo;
 

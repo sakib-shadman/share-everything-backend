@@ -17,9 +17,13 @@ import java.nio.charset.StandardCharsets;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.MONTHS;
 
 @Service
 @Slf4j
@@ -114,4 +118,34 @@ public class ShareEverythingUtils {
         byte[] encoded = IOUtils.toByteArray(stream);
         return new String(encoded, StandardCharsets.UTF_8);
     }
+
+    public static Integer getNumberOfWeeks(Date startDate,Date endDate){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+
+        int weeks = 0;
+        while (cal.getTime().before(endDate)) {
+            cal.add(Calendar.WEEK_OF_YEAR, 1);
+            weeks++;
+        }
+        return weeks;
+
+    }
+
+    public static Integer getNumberOfDays(String startDateStr,String endDateStr){
+
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(startDateStr);
+        return Math.toIntExact(DAYS.between(startDate, endDate))+1;
+
+    }
+
+    public static Integer getNumberOfMonth(String startDateStr,String endDateStr){
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(startDateStr);
+        return Math.toIntExact(MONTHS.between(startDate, endDate));
+    }
+
+
 }

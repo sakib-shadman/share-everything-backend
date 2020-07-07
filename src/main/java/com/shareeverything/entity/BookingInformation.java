@@ -22,6 +22,8 @@ public class BookingInformation extends BasicEntity {
     @ManyToOne
     Post post;
 
+    Double amoutToPay;
+
     @Enumerated(EnumType.STRING)
     BookingStatus bookingStatus;
 
