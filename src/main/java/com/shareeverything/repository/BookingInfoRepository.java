@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 @Repository
 public interface BookingInfoRepository extends JpaRepository<BookingInformation,UUID> {
+
+    BookingInformation findById(String id);
     
 }

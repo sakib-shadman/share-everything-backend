@@ -27,5 +27,7 @@ public interface PostService {
 
     BaseResponseDto setBooking(String userId, BookingSetRequestDto bookingSetRequestDto);
 
+    BaseResponseDto confirmBooking(String orderId);
+
 
 }

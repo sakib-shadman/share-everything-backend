@@ -275,4 +275,27 @@ public class PostServiceImpl implements PostService {
         return amountToPay;
 
     }
+
+    @Override
+    public BaseResponseDto confirmBooking(String orderId) {
+
+        BookingInformation bookingInformation = bookingInfoRepository.findById(orderId);
+        if(bookingInformation == null){
+            log.error("Booking not found. booking-id: {}",orderId);
+            throw new ShareEverythingException("Booking not found.");
+        }
+        Post post = bookingInformation.getPost();
+        if(post == null){
+            log.error("Post not found. booking-id: {}",orderId);
+            throw new ShareEverythingException("Post not found.");
+        }
+        post.setProductStatus(ProductStatus.BOOKED);
+        bookingInformation.setBookingStatus(BookingStatus.CONFIRM);
+        postRepository.save(post);
+        bookingInfoRepository.save(bookingInformation);
+        return BaseResponseDto.builder()
+                .message("Booking confirmed.")
+                .status(ResponseStatus.SUCCESS)
+                .build();
+    }
 }
