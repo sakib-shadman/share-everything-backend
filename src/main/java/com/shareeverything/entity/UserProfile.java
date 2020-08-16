@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserProfile extends BasicEntity{
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     User user;
 
     String address;

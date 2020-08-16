@@ -12,6 +12,7 @@ import com.shareeverything.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +25,8 @@ import java.util.UUID;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+    private static final String USER_KEY = "USER";
+    private static final String USER_PROFILE_KEY = "USER_PROFILE";
 
     @Autowired
     UserRepository userRepository;
@@ -37,6 +40,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MapperFactory mapperFactory;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
+   /* @Autowired
+    HashOperations hashOperations;
+*/
 
     @Override
     public void createUser(UserDto userDto) {
@@ -52,16 +61,26 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         user.setCreatedAt(new Date());
         userRepository.save(user);
-
     }
 
     @Override
     public UserProfileDto getUserProfile(String userId) {
+        User user;
+        UserProfile userProfile;
+        log.info(""+redisTemplate.hasKey(USER_KEY));
+        user = (User) redisTemplate.opsForValue().get(userId);
+        if (user == null) {
+            log.error("Getting user from database.");
+            user = userRepository.getOne(UUID.fromString(userId));
+            userProfile = userProfileRepository.findByUser(user);
+            redisTemplate.opsForValue().set(userId, user);
+            redisTemplate.opsForValue().set("user-profile:"+userId, userProfile);
+        } else {
+            log.info("Getting user from redis cache");
+            userProfile = (UserProfile) redisTemplate.opsForValue().get("user-profile:"+userId);
+        }
 
-        User user = userRepository.getOne(UUID.fromString(userId));
-        UserProfile userProfile = userProfileRepository.findByUser(user);
-
-        if(userProfile == null){
+        if (userProfile == null) {
 
             userProfile = UserProfile.builder()
                     .user(user)
@@ -91,6 +110,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getOne(UUID.fromString(userId));
         UserProfile userProfile = userProfileRepository.findByUser(user);
 
+        if (userProfile == null) {
+            userProfile = UserProfile.builder()
+                    .user(user)
+                    .createdAt(new Date())
+                    .build();
+        }
+
         user = userProfile.getUser();
 
         user.setFullName(userProfileDto.getFullName());
@@ -98,12 +124,6 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userProfileDto.getLastName());
         user.setMobileNumber(userProfileDto.getMobileNo());
 
-        if(userProfile == null){
-            userProfile = UserProfile.builder()
-                    .user(user)
-                    .createdAt(new Date())
-                    .build();
-        }
 
         userProfile.setAddress(userProfileDto.getAddress());
         userProfile.setCity(userProfileDto.getCity());
@@ -115,6 +135,9 @@ public class UserServiceImpl implements UserService {
 
         userProfileRepository.save(userProfile);
         userRepository.save(user);
+
+        redisTemplate.opsForValue().set(userId, user);
+        redisTemplate.opsForValue().set("user-profile:"+userId, userProfile);
 
         return BaseResponseDto.builder()
                 .message("User profile updated.")
