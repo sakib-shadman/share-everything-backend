@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                /*.antMatchers("/v1/countries")*/
+                .antMatchers("/actuator/**","/v1/scheduleEmail")
                 .antMatchers(HttpMethod.POST, "/v1/sign-up")
                 .antMatchers(HttpMethod.POST, "/v1/sign-in");
     }
