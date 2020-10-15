@@ -21,7 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 /*.antMatchers("/v1/countries")*/
                 .antMatchers(HttpMethod.POST, "/v1/sign-up")
-                .antMatchers(HttpMethod.POST, "/v1/sign-in");
+                .antMatchers(HttpMethod.POST, "/v1/sign-in")
+                .antMatchers(HttpMethod.POST, "/v1/post-log")
+                .antMatchers(HttpMethod.GET, "/v1/get-log");
     }
 
 

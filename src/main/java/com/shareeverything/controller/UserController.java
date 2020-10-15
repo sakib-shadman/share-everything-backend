@@ -4,8 +4,10 @@ import com.shareeverything.constant.ResponseStatus;
 import com.shareeverything.dto.BaseResponseDto;
 import com.shareeverything.dto.UserDto;
 import com.shareeverything.dto.UserProfileDto;
+import com.shareeverything.entity.Log;
 import com.shareeverything.entity.User;
 import com.shareeverything.entity.UserProfile;
+import com.shareeverything.repository.LogRepository;
 import com.shareeverything.security.SecurityContextDetails;
 import com.shareeverything.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class UserController extends BaseController{
 
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    LogRepository logRepository;
 
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
@@ -53,6 +57,14 @@ public class UserController extends BaseController{
 
         SecurityContextDetails contextDetails = getSecurityContextDetails();
         return ResponseEntity.ok(userService.updateUserProfile(userProfileDto,contextDetails.getUserid()));
+    }
+    @RequestMapping(value = "/post-log", method = RequestMethod.POST)
+    public ResponseEntity<?> saveLog(@RequestBody Log log) {
+        return ResponseEntity.ok(logRepository.save(log));
+    }
+    @RequestMapping(value = "/get-log", method = RequestMethod.GET)
+    public ResponseEntity<?> getLog() {
+        return ResponseEntity.ok(logRepository.findAll());
     }
 
 
