@@ -29,12 +29,12 @@ public class RabbitMqController {
     @RequestMapping(path = "/send-message", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> sendMessage(@RequestBody RabbitMqTestDto rabbitMqTestDto) {
 
-        String exchange = rabbitMqConfig.getApp1Exchange();
-        String routingKey = rabbitMqConfig.getApp1RoutingKey();
+        String exchange = rabbitMqConfig.getApp2Exchange();
+        String routingKey = rabbitMqConfig.getApp2RoutingKey();
 
         /* Sending to Message Queue */
         try {
-            rabbitMqMessageSender.sendMessage(rabbitTemplate, exchange, routingKey, rabbitMqTestDto);
+            rabbitMqMessageSender.sendMessage(rabbitTemplate, exchange, routingKey, rabbitMqTestDto.getMessage());
             return new ResponseEntity<String>("In queue", HttpStatus.OK);
 
         } catch (Exception ex) {
