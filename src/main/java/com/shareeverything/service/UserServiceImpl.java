@@ -128,4 +128,22 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email);
         return user;
     }
+
+    @Override
+    public BaseResponseDto updateFcmToken(String userId, String token) {
+        User user = userRepository.getOne(UUID.fromString(userId));
+        if(user == null){
+            log.error("No user exists, user-id: {}",userId);
+            return BaseResponseDto.builder()
+                    .message("No user exists")
+                    .status(ResponseStatus.FAILED)
+                    .build();
+        }
+        user.setFcmToken(token);
+        userRepository.save(user);
+        return BaseResponseDto.builder()
+                .message("Fcm token updated")
+                .status(ResponseStatus.SUCCESS)
+                .build();
+    }
 }

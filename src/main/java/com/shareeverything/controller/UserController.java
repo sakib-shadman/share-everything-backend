@@ -12,10 +12,7 @@ import com.shareeverything.security.SecurityContextDetails;
 import com.shareeverything.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1")
@@ -65,6 +62,12 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/get-log", method = RequestMethod.GET)
     public ResponseEntity<?> getLog() {
         return ResponseEntity.ok(logRepository.findAll());
+    }
+
+    @RequestMapping(value = "/update-fcm-token/{fcm-token}", method = RequestMethod.GET)
+    public ResponseEntity<?> updateFcmToken(@PathVariable(value = "fcm-token") String fcmToken){
+        SecurityContextDetails contextDetails = getSecurityContextDetails();
+        return ResponseEntity.ok(userService.updateFcmToken(contextDetails.getUserid(),fcmToken));
     }
 
 

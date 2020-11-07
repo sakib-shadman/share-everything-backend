@@ -31,6 +31,8 @@ public class User extends BasicEntity{
 
     String mobileNumber;
 
+    String fcmToken;
+
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

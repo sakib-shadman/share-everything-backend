@@ -15,4 +15,6 @@ public interface UserService {
     BaseResponseDto updateUserProfile(UserProfileDto userProfileDto, String userId);
 
     User getUserByEmail(String email);
+
+    BaseResponseDto updateFcmToken(String userId,String token);
 }
