@@ -5,6 +5,7 @@ import com.shareeverything.dto.request.AmountToPayRequestDto;
 import com.shareeverything.dto.request.BookingSetRequestDto;
 import com.shareeverything.dto.request.PostRequestDto;
 import com.shareeverything.dto.response.AmountToPayResponseDto;
+import com.shareeverything.dto.response.PostInfoDto;
 import com.shareeverything.dto.response.PostResponseDto;
 
 import java.util.List;
@@ -29,5 +30,6 @@ public interface PostService {
 
     BaseResponseDto confirmBooking(String orderId);
 
+    PostInfoDto postInfo();
 
 }

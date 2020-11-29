@@ -10,6 +10,7 @@ import com.shareeverything.dto.request.AmountToPayRequestDto;
 import com.shareeverything.dto.request.BookingSetRequestDto;
 import com.shareeverything.dto.request.PostRequestDto;
 import com.shareeverything.dto.response.AmountToPayResponseDto;
+import com.shareeverything.dto.response.PostInfoDto;
 import com.shareeverything.dto.response.PostResponseDto;
 import com.shareeverything.entity.*;
 import com.shareeverything.exception.ShareEverythingException;
@@ -144,12 +145,12 @@ public class PostServiceImpl implements PostService {
             post.setContactNo(postRequestDto.getContactNo());
         }
 
-        if(!StringUtils.isEmpty(postRequestDto.getAmout())){
-            post.setAmount(postRequestDto.getAmout());
+        if(!StringUtils.isEmpty(postRequestDto.getAmount())){
+            post.setAmount(postRequestDto.getAmount());
         }
 
-        if(!StringUtils.isEmpty(postRequestDto.getIsfree())){
-            post.setIsFree(postRequestDto.getIsfree());
+        if(!StringUtils.isEmpty(postRequestDto.getIsFree())){
+            post.setIsFree(postRequestDto.getIsFree());
         }
 
         if(!StringUtils.isEmpty(postRequestDto.getChargingScheduleId())){
@@ -297,5 +298,15 @@ public class PostServiceImpl implements PostService {
                 .message("Booking confirmed.")
                 .status(ResponseStatus.SUCCESS)
                 .build();
+    }
+
+    @Override
+    public PostInfoDto postInfo() {
+        PostInfoDto postInfoDto = PostInfoDto.builder()
+        .cities(cityRepository.findAll())
+        .categories(categoryRepository.findAll())
+        .chargingSchedules(chargingScheduleRepository.findAll())
+        .build();
+        return postInfoDto;
     }
 }

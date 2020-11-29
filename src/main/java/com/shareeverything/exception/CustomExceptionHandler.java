@@ -2,6 +2,7 @@ package com.shareeverything.exception;
 
 import com.shareeverything.constant.ResponseStatus;
 import com.shareeverything.dto.BaseResponseDto;
+import com.shareeverything.dto.response.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.TypeMismatchException;
@@ -21,6 +22,9 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @ControllerAdvice
 @Slf4j
@@ -33,7 +37,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("Exception: {}", ex.getClass().getName());
         log.error("Stack trace ", ex);
 
-        //final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), allErrors);
+        List<String> validationErrors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.toList());
+        if(!validationErrors.isEmpty()){
+            ValidationErrorResponse validationErrorResponse = ValidationErrorResponse.builder()
+                    .validationError(validationErrors)
+                    .build();
+            return handleExceptionInternal(ex, validationErrorResponse, headers, HttpStatus.BAD_REQUEST, request);
+        }
         BaseResponseDto response = BaseResponseDto.builder()
                 .status(ResponseStatus.FAILED)
                 .message("This operation was not successful.")

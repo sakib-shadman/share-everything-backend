@@ -1,6 +1,5 @@
-package com.shareeverything.dto;
+package com.shareeverything.dto.response;
 
-import com.shareeverything.constant.ResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +11,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseResponseDto {
-
-    ResponseStatus status;
-    String message;
-
+public class ValidationErrorResponse {
+    List<String> validationError;
 }
